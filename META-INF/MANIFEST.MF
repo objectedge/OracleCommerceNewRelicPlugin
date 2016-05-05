@@ -1,0 +1,11 @@
+ATG-Product: OE NewRelic
+Manifest-Version: 1.0
+ATG-Client-Class-Path: lib/classes.jar config/config.jar
+ATG-Class-Path: lib/classes.jar lib/newrelic-api.jar lib/metrics_publish-2.0.1.jar lib/activation-1.1.jar lib/jackson-core-asl-1.9.2.jar lib/jackson-jaxrs-1.9.2.jar lib/jackson-mapper-asl-1.9.2.jar lib/jackson-xc-1.9.2.jar lib/jaxb-api-2.2.2.jar lib/jaxb-impl-2.2.3-1.jar lib/jersey-bundle-1.19.jar lib/jersey-core-1.19.jar lib/jersey-json-1.19.jar lib/jersey-server-1.19.jar lib/jettison-1.1.jar lib/jsr311-api-1.1.1.jar lib/stax-api-1.0-2.jar lib/commons-beanutils-1.9.2.jar 
+ATG-Required: DCS
+ATG-Client-Update-File: true
+ATG-Config-Path: config/config.jar
+ATG-Web-Module: j2ee-apps/newrelic.war
+
+Name: lib/classes.jar
+ATG-Client-Update-File: true

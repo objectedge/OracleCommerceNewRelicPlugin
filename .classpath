@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="lib/activation-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core-asl-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-jaxrs-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-mapper-asl-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-xc-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-api-2.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-impl-2.2.3-1.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-j2ee.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-bundle-1.19.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-core-1.19.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-json-1.19.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-server-1.19.jar"/>
+	<classpathentry kind="lib" path="lib/jettison-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/metrics_publish-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/stax-api-1.0-2.jar"/>
+	<classpathentry kind="var" path="DYNAMO_ROOT/DAS/lib/classes.jar"/>
+	<classpathentry kind="var" path="DYNAMO_ROOT/DAS/lib/servlet.jar"/>
+	<classpathentry kind="var" path="DYNAMO_ROOT/DAS/lib/jsp-api.jar"/>
+	<classpathentry kind="var" path="DYNAMO_ROOT/Publishing/base/lib/classes.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

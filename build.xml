@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="oe_oracle_commerce_newrelic_plugin" basedir=".">
+	<property environment="env" />
+	<!-- Import task definitions from Ant-Contrib library. -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${basedir}/lib/ant-contrib.jar"/>
+	<property file="${basedir}/build.properties" />
+	<!-- The dynamo class path -->
+		<path id="dynamo.classpath">
+			<fileset dir="${dynamo.root.dir}/DAF/Search/Base/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/DAF/Search/common/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/DAF/Search/Index/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/DAF/Search/Query/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/DAF/Search/Routing/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/DAS/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/DAS-UI/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/DPS/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/DSS/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/PublishingAgent/base/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/PublishingWebAgent/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/Publishing/base/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/DCS/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/REST/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/DPS-UI/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/WebUI/lib">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${dynamo.root.dir}/AssetUI/lib">
+				<include name="**/*.jar" />
+			</fileset>
+	        <fileset dir="${dynamo.root.dir}/FlexUI/lib">
+	            <include name="**/*.jar" />
+	        </fileset>		
+	        <fileset dir="${dynamo.root.dir}/BCC/lib">
+	            <include name="**/*.jar" />
+	        </fileset>
+		</path>
+	<!-- Other things to watch for in the classpath -->
+		<patternset id="resource.files">
+			<include name="**/*.properties" />
+			<include name="**/*.xml" />
+			<include name="**/*.dtd" />
+		</patternset>
+
+	<target name="-init">
+			<!-- Create the timestamp -->
+			<tstamp />
+			<echo message="" />
+			<echo message="" />
+			<echo message="#############################################################################" />
+			<echo message="#############################################################################" />
+			<echo message="${module.parent}.${module.name}: start date = ${DSTAMP}  start time = ${TSTAMP}" />
+			<echo message="JAVA_HOME       = ${env.JAVA_HOME}" />
+			<echo message="dynamo.home     = ${dynamo.home}" />
+			<echo message="dynamo.root.dir = ${dynamo.root.dir}" />
+			<echo message="das.root.dir    = ${das.root.dir}" />
+			<echo message="global.dir      = ${global.dir}" />
+			<echo message="common.dir      = ${common.dir}" />
+			<echo message="install.unit    = ${install.unit}" />
+			<echo message="#############################################################################" />
+			<echo message="#############################################################################" />
+			
+			<!--
+	    	      The modules in order of dependency, i.e. the most dependant module is
+	    	      built last.
+	    	 -->
+			<echo message="modules.build.order - ${modules.build.order}"/>
+			<filelist id="module.files" dir="${basedir}" files="${modules.build.order}" />
+			<pathconvert pathsep=" " dirsep="/" property="module.files.string" refid="module.files">
+				<map from="${basedir}" to="." />
+			</pathconvert>
+			<echo />
+			<echo>${module.files.string}</echo>
+			<echo />		
+			<echo message="" />
+			<echo message="" />		
+		</target>
+	<!-- Cleans, builds and installs the project. Also executes 'all' target for all sub modules. -->
+		  <target name="all"
+		          depends="build,install"
+		          description="Cleans, builds, and installs the project.">
+		  </target>
+	<!--
+	    Deletes the build and install directories.
+	    -->
+		<target name="clean" depends="-init" description="Deletes the contents of the install and build directories.">
+			<echo message="cleaning ${install.dir}"/> 
+			<delete failonerror="false" includeEmptyDirs="true">
+				<fileset dir="${install.dir}" includes="**/*" excludes="${clean.task.excludes}" />
+				<fileset dir="${build.dir}" includes="**/*" />
+			</delete>
+		</target>
+	<!--
+	    Installs the codebase to the install directory.  This will not build anything,
+	    but will create enough of a base application to run off.
+	  	-->
+		<target name="install" depends="-init, -createdirs, -installunit, -installcore, -install-application-wars, -installsql" description="Installs the codebase to the install directory.">
+		</target>
+	
+	<target name="-installcore" depends="-installclasses,-installconfigs,-copymanifest" description="Installs the core config and classes">
+			<!-- <delete dir="${install.dir}/META-INF" /> -->
+			<mkdir dir="${install.dir}/META-INF" />
+			<copy todir="${install.dir}/META-INF" file="${build.dir}/META-INF/MANIFEST.MF" />
+		  </target>
+	
+	 <target name="-installclasses" depends="-init" description="Copies Java libraries to installation directory">
+		    <!-- Copy libraries -->
+		    <if>
+		      <equals arg1="${srcdirectory.exists}" arg2="true" />
+		      <then>
+		        <copy todir="${install.dir}/lib" overwrite="true" failonerror="false">
+		          <fileset dir="${build.dir}/lib" />
+		          <fileset dir="${lib.dir}" />
+		        </copy>
+		      </then>
+		    </if>
+		  </target>
+	
+	 <!-- Copy the configs from the build directory to the install -->
+		  <target name="-installconfigs" depends="-init" description="Copy configs to install">
+		    <echo level="debug">Checking whether module's config.jar exist.</echo>
+		    <available file="${build.config.dir}/config.jar" property="config.exists" />
+		    
+		    <if>
+		      <equals arg1="${config.exists}" arg2="true" />
+		      <then>
+		      	<copy todir="${install.dir}/config" failonerror="false">
+					<fileset dir="${build.dir}/config" />
+				</copy>
+
+				<mkdir dir="${install.dir}/liveconfig" />
+				<copy todir="${install.dir}/liveconfig" failonerror="false">
+					<fileset dir="${build.dir}/liveconfig" />
+				</copy>
+				
+				<mkdir dir="${install.dir}/configlayers" />
+				<copy todir="${install.dir}/configlayers" failonerror="false">
+					<fileset dir="${build.dir}/configlayers" />
+				</copy>
+		      
+		      </then>
+		    </if>
+		  </target>
+	
+	<target name="-copymanifest">
+			<!-- Set filter token to look for 
+	             install unit
+	             module parent name
+	             and module name
+	             settings in manifests and configuration files -->
+			<filter token="install_unit" value="${install.unit}" />
+			<filter token="module_root_parent" value="${module.root.parent}" />
+			<filter token="module_name" value="${module.name}" />
+
+			<!-- Copy the manifest -->
+			<copy todir="${build.dir}/META-INF" filtering="true" overwrite="true">
+				<fileset dir="${inf.dir}" />
+			</copy>
+			
+			<!-- update the manifest file so that it's properly formatted -->		
+			<manifest file="${build.dir}/META-INF/MANIFEST.MF" mode="update"/>
+
+			<!-- 
+	            Make a temporary config directory to support filter substitution 
+	            This allows us to salt substitution variables in the config 
+	            files.  We try and keep this to a minimum to reduce confusion.
+	        -->
+			<mkdir dir="${build.tempconfig.dir}" />
+			<copy todir="${build.tempconfig.dir}" filtering="true">
+				<fileset dir="${config.dir}" />
+			</copy>
+
+			<!-- check to see if we should jar up the configuration files or just 
+	             copy them to the config directory -->
+			<if>
+				<equals arg1="${jar.configs.and.classes}" arg2="true" />
+				<then>
+					<echo message="Jarring up configuration files" />
+					<!-- Jar up the configuration files -->
+					<jar jarfile="${build.config.dir}/config.jar" basedir="${build.tempconfig.dir}/" includes="**" />
+				</then>
+				<else>
+					<!-- Not supposed to jar up the configuration files just copy
+	                 them to a directory with the name config.jar -->
+					<echo message="Using exploded configuration files" />
+					<mkdir dir="${build.config.dir}/config.jar" />
+					<copy todir="${build.config.dir}/config.jar">
+						<fileset dir="${build.tempconfig.dir}" />
+					</copy>
+				</else>
+			</if>
+
+		</target>
+	
+	<target name="-install-application-wars" depends="-j2eedirsexist" if="j2eedir.exists" description="Deploys the J2EE application for the module">
+
+			<copy description="Copying j2ee files to deployment" todir="${install.j2ee.dir}" verbose="${copy.verbose.bool}">
+				<fileset dir="${j2ee.dir}">
+					<exclude name="META-INF/*.*" />
+				</fileset>
+			</copy>
+
+			<antcall target="-strip-whitespace" />
+			
+			<!-- For each web inf we find copy the taglibraries into it -->
+			<path id="web.inf.dirs">
+				<dirset dir="${install.j2ee.dir}">
+					<include name="**/WEB-INF" />
+				</dirset>
+			</path>
+
+			<foreach param="target.webinf.dir" target="-copy-taglibs">
+				<path refid="web.inf.dirs" />
+			</foreach>
+		</target>
+	
+	<target name="-j2eedirsexist" description="verifies that the j2ee directories exist">
+			<available file="${j2ee.dir}" property="j2eedir.exists" />
+		</target>
+	
+	<target name="-installsql" description="Copy the sql to the deploy directory" depends="-coredirsexist" if="sqldir.exists">
+
+			<echo message="Copying project sql to ${install.dir}/sql" />
+
+			<!-- <delete dir="${install.dir}/sql" /> -->
+			<mkdir dir="${install.dir}/sql" />
+
+			<!-- copy any text files -->
+			<patternset id="sql.text.files">
+				<include name="**/*.TXT" />
+				<include name="**/*.txt" />
+			</patternset>
+			<copy todir="${install.dir}/sql" verbose="true" filtering="true">
+				<fileset dir="${sql.dir}">
+					<patternset refid="sql.text.files" />
+				</fileset>
+			</copy>
+
+			<!-- Copy over the SQL files. -->
+			<copy todir="${install.dir}/sql" verbose="true">
+				<fileset dir="${sql.dir}" />
+				<mapper type="glob" from="*.sql" to="*.sql" />
+			</copy>
+
+			<!-- The destdir goes into the scripts as the filter, so this isn't as 
+				stupid as it looks. -->
+			<copytemplate srcdir="${sql.dir}/${database.type}/install" coreschemauser="${core.db.user}" catalogschemauser="${cataloga.db.user}" destdir="${install.dir}/sql/${database.type}/install" />
+
+			<copytemplate srcdir="${sql.dir}/${database.type}/uninstall" coreschemauser="${core.db.user}" catalogschemauser="${cataloga.db.user}" destdir="${install.dir}/sql/${database.type}/uninstall" />
+
+			<if>
+				<equals arg1="${export.atg.sql}" arg2="true" />
+				<then>
+					<antcall target="-export-atg-sql" />
+				</then>
+			</if>
+
+		</target>
+	
+	<!--
+	    checks to see which core directories exist this allows the ANT tasks to be 
+	    a bit smarter and only perform duties if they need to.
+	    -->
+		<target name="-coredirsexist" description="verifies that certain core directories exist">
+			<available file="${src.dir}" property="srcdirectory.exists" />
+			<available file="${test.src.dir}" property="testsrcdirectory.exists" />
+			<available file="${sql.dir}" property="sqldir.exists" />
+			<available file="${liveconfig.dir}" property="liveconfig.exists" />
+			<available file="${configlayers.dir}" property="configlayers.exists" />
+			<available file="${config.dir}" property="config.exists" />
+			<available file="${lib.dir}" property="libdir.exists" />
+		</target>
+	
+	<!--
+	    Create the directories used in the build process. Not intended to be used publically.
+	    -->
+		<target name="-createdirs">
+			<mkdir dir="${build.dir}" />
+			<mkdir dir="${build.dir}/lib" />
+			<mkdir dir="${build.dir}/liveconfig" />
+			<mkdir dir="${build.dir}/configlayers" />
+			<mkdir dir="${build.config.dir}" />
+			<mkdir dir="${classes.dir}" />
+			<mkdir dir="${reports.dir}" />
+			<mkdir dir="${javadoc.dir}" />
+			<mkdir dir="${ear.dir}" />
+		</target>
+			<target name="-installunit" description="Sets the project installation directory">
+
+					<mkdir dir="${dynamo.root.dir}/${install.unit}/META-INF" />
+					<manifest mode="update" file="${dynamo.root.dir}/${install.unit}/META-INF/MANIFEST.MF">
+						<attribute name="ATG-Install-Unit" value="${install.unit}" />
+						<attribute name="ATG-Install-Version" value="${install.unit}@2006.3" />
+
+						<!-- for merchandising need to include DCS-UI -->
+						<!-- -->
+						<!-- <attribute name="ATG-Install-Requires" value="DCS-UI@2006.3"/> -->
+
+						<!-- Example of how to write a requirement against an install unit -->
+						<!-- -->
+						<!-- <attribute name="ATG-Install-Requires" value="DCS-ABTest@2004.3"/> -->
+
+					</manifest>
+
+				</target>	
+			
+		<!--
+	    Compiles and jars the code.
+	    -->
+		<target name="build" depends="-init,compile,-jar" description="Compiles and jars the code.">
+		</target>
+	
+	<target name="-jar" depends="-createdirs,-jarclasses,-jarliveconfig,-jarconfiglayers,-copymanifest" description="creates build directories, jars classes and configuration">
+
+		</target>
+	
+	<target name="-jarliveconfig" depends="-createdirs,-coredirsexist" if="liveconfig.exists" description="copies liveconfig to build directory.">
+			<copy todir="${build.dir}/liveconfig">
+				<fileset dir="${liveconfig.dir}" />
+			</copy>
+		</target>
+
+		<target name="-jarconfiglayers" depends="-createdirs,-coredirsexist" if="configlayers.exists" description="copies configlayers to build directory.">
+			<copy todir="${build.dir}/configlayers">
+				<fileset dir="${configlayers.dir}" />
+			</copy>
+		</target>
+	
+	<target name="-jarclasses" depends="-createdirs,-coredirsexist" if="srcdirectory.exists" description="jars classes and source to build directory.">
+
+			<if>
+				<equals arg1="${jar.configs.and.classes}" arg2="true" />
+				<then>
+					<echo message="Jarring up class files" />
+					<!-- Jar up the configuration files -->
+					<jar jarfile="${build.dir}/lib/classes.jar" basedir="${classes.dir}/" includes="**" />
+					<zip zipfile="${build.dir}/src.zip" basedir="${src.dir}/" includes="**" />
+				</then>
+				<else>
+					<!-- Not supposed to jar up the configuration files just copy
+	                 them to a directory with the name config.jar -->
+					<echo message="Using exploded class files" />
+					<mkdir dir="${build.dir}/lib/classes.jar" />
+					<copy todir="${build.dir}/lib/classes.jar">
+						<fileset dir="${classes.dir}" />
+					</copy>
+				</else>
+			</if>
+		</target>
+	
+	<target name="compile" depends="-createdirs,-coredirsexist" if="srcdirectory.exists" description="Compiles the source code to the build directory.">
+			<mkdir dir="${classes.dir}" />
+			<property name="dynamoclasspath" refid="dynamo.classpath"/>
+			<echo message="dynamo.classpath = ${dynamoclasspath}"/>
+			<if>
+				<isreference refid="lib.classpath"/>
+				<then>
+					<property name="libclasspath" refid="lib.classpath"/>
+				</then>
+				<else>
+					<property name="libclasspath" value=""/>
+				</else>
+			</if>		
+			<property name="libclasspath" refid="lib.classpath"/>
+			<echo message="lib.classpath = ${libclasspath}"/>
+			
+			<if>
+				<isreference refid="oe.classpath"/>
+				<then>
+					<property name="oeclasspath" refid="oe.classpath"/>
+				</then>
+				<else>
+					<property name="oeclasspath" value=""/>
+				</else>
+			</if>
+			<echo message="oe.classpath = ${oeclasspath}"/>
+					
+			<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true" deprecation="false" optimize="false" source="1.6" target="1.6" verbose="${javac.verbose.bool}" includeantruntime="false">
+				<classpath path="${classpath}" />
+				<classpath path="${libclasspath}" />
+				<classpath refid="dynamo.classpath" />
+				<classpath path="${oeclasspath}" />
+				<include name="**/*.java" />
+			</javac>
+			<!-- copy java resource files to build directory -->
+			<copy todir="${classes.dir}">
+				<fileset dir="${src.dir}/">
+					<patternset refid="resource.files" />
+				</fileset>
+			</copy>
+		</target>
+	<!-- The classpath for the project. -->
+	<path id="oe.classpath">
+		<fileset dir="${dynamo.root.dir}/OE/MarketingExtensions/lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<dirset dir="${dynamo.root.dir}/OE/MarketingExtensions/lib">
+			<include name="classes.jar" />
+		</dirset>
+	</path>
+	<path id="lib.classpath">
+		<fileset dir="${lib.dir}">
+		  <include name="**/*.jar"/>
+		  <include name="**/*.zip"/>
+		</fileset>
+	</path>
+</project>
