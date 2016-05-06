@@ -53,30 +53,26 @@ The ``OC Newrelic module`` exposes the health metrics in a consistent and normal
 
 ## Installation
 -----------------------
-#### Step 1 - Checkout the module
+#### Step 1 - Checkout the `OE.NewRelic` module
 Checkout the module from this repository as a Java project into your favorite IDE.
 
-#### Step 2 - Set environment variables for the module
-Set DYNAMO_HOME and DYNAMO_ROOT variables in the environment pointing to the local Oracle Commerce installation stack.
+#### Step 2 - Build the `OE.NewRelic` module
+Set DYNAMO_HOME and DYNAMO_ROOT variables in the environment pointing to the local Oracle Commerce installation stack. Execute the build.xml (default target "all"). This will compile the classes and copy the artifacts into the Oracle Commerce installation stack.
 
-#### Step 2 - Build the module
-Execute the build.xml (default target "all"). This will compile the classes and copy the artifacts into the Oracle Commerce installation stack.
-
-#### Step 3 - Assemble the module
+#### Step 3 - Assemble the `OE.NewRelic` module
 When assembling the .ear for your application, add `OE.NewRelic` to the list of modules to assemble before calling run-assembler command. 
 
 **Note**: For more informaton refer [Oracle Commerce Platform Programming Guide](http://docs.oracle.com/cd/E24152_01/Platform.10-1/ATGPlatformProgGuide/html/s0304commandoptions01.html).
 
-#### Step 4 - Start the module
+#### Step 4 - Start the `OE.NewRelic` module
 When starting the server add 'OE.NewRelic' to the list of modules to start, 
 for ex:
 ```
 -Datg.dynamo.modules=Estore,OE.Newrelic
 ```
 
+#### Step 5 - Ensure successfull startup of the `OE.NewRelic` module
 
-## Ensure startup of `OE.NewRelic` module
-----
 * Navigate to dyn/admin of the Oracle Commerce server and check for running products. You should see `OE.NewRelic` in the lis of running modules.
 ```
 http://[Servername]:[port]/dyn/admin/atg/dynamo/admin/en/running-products.jhtml
@@ -86,6 +82,6 @@ http://[Servername]:[port]/dyn/admin/atg/dynamo/admin/en/running-products.jhtml
 ```
 http://[Servername]:[port]/newrelic/rest/api/metrics/get
 ```
-The response should be all the metrics that we are being monitored in the system.
+Upon successfull startup the response would be a list of all the metrics that are being monitored in the system.
 
 
