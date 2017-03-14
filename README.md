@@ -82,6 +82,6 @@ http://[Servername]:[port]/dyn/admin/atg/dynamo/admin/en/running-products.jhtml
 ```
 http://[Servername]:[port]/newrelic/rest/api/metrics/get
 ```
-Upon successfull startup the response would be a list of all the metrics that are being monitored in the system.
+Upon successful startup the response would be a list of all the metrics that are being monitored in the system.
 
 
