@@ -83,8 +83,6 @@
 			<echo message="dynamo.home     = ${dynamo.home}" />
 			<echo message="dynamo.root.dir = ${dynamo.root.dir}" />
 			<echo message="das.root.dir    = ${das.root.dir}" />
-			<echo message="global.dir      = ${global.dir}" />
-			<echo message="common.dir      = ${common.dir}" />
 			<echo message="install.unit    = ${install.unit}" />
 			<echo message="#############################################################################" />
 			<echo message="#############################################################################" />
@@ -404,7 +402,7 @@
 			</if>
 			<echo message="oe.classpath = ${oeclasspath}"/>
 					
-			<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true" deprecation="false" optimize="false" source="1.6" target="1.6" verbose="${javac.verbose.bool}" includeantruntime="false">
+			<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true" deprecation="false" optimize="false" source="1.8" target="1.8" verbose="${javac.verbose.bool}" includeantruntime="false">
 				<classpath path="${classpath}" />
 				<classpath path="${libclasspath}" />
 				<classpath refid="dynamo.classpath" />
@@ -420,12 +418,7 @@
 		</target>
 	<!-- The classpath for the project. -->
 	<path id="oe.classpath">
-		<fileset dir="${dynamo.root.dir}/OE/MarketingExtensions/lib">
-			<include name="**/*.jar" />
-		</fileset>
-		<dirset dir="${dynamo.root.dir}/OE/MarketingExtensions/lib">
-			<include name="classes.jar" />
-		</dirset>
+		
 	</path>
 	<path id="lib.classpath">
 		<fileset dir="${lib.dir}">
