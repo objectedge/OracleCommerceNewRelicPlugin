@@ -226,8 +226,6 @@
 					<exclude name="META-INF/*.*" />
 				</fileset>
 			</copy>
-
-			<antcall target="-strip-whitespace" />
 			
 			<!-- For each web inf we find copy the taglibraries into it -->
 			<path id="web.inf.dirs">
@@ -243,6 +241,7 @@
 	
 	<target name="-j2eedirsexist" description="verifies that the j2ee directories exist">
 			<available file="${j2ee.dir}" property="j2eedir.exists" />
+			<echo message="j2ee.dir - ${j2ee.dir}"/>
 		</target>
 	
 	<target name="-installsql" description="Copy the sql to the deploy directory" depends="-coredirsexist" if="sqldir.exists">
@@ -416,6 +415,33 @@
 				</fileset>
 			</copy>
 		</target>
+	
+	<target name="-copy-taglibs">
+			<echo message="Copying Tag Libraries to directory ${target.webinf.dir}" />
+
+			<!-- Taglib locations -->
+			<property name="das.taglib.tld.dir" value="${dynamo.root.dir}/DAS/taglib/dspjspTaglib/1.0/tld" />
+			<property name="das.taglib.lib.dir" value="${dynamo.root.dir}/DAS/taglib/dspjspTaglib/1.0/lib" />
+			<property name="core.taglib.tld.dir" value="${dynamo.root.dir}/DAS/taglib/coreTaglib/1.0/tld" />
+			<property name="core.taglib.lib.dir" value="${dynamo.root.dir}/DAS/taglib/coreTaglib/1.0/lib" />
+			<property name="jstl.taglib.tld.dir" value="${dynamo.root.dir}/DAS/taglib/jstl/1.2/tld" />
+			<property name="jstl.taglib.lib.dir" value="${dynamo.root.dir}/DAS/taglib/jstl/1.2/lib" />
+			<property name="json.taglib.lib.dir" value="${dynamo.root.dir}/DAS/taglib/json/0.4/lib" />
+
+			<copy todir="${target.webinf.dir}/lib" verbose="true">
+				<fileset dir="${das.taglib.lib.dir}" />
+				<fileset dir="${core.taglib.lib.dir}" />
+				<fileset dir="${jstl.taglib.lib.dir}" />
+				<fileset dir="${json.taglib.lib.dir}" />
+			</copy>
+
+			<copy todir="${target.webinf.dir}/tld" verbose="true">
+				<fileset dir="${das.taglib.tld.dir}" />
+				<fileset dir="${core.taglib.tld.dir}" />
+				<fileset dir="${jstl.taglib.tld.dir}" />
+			</copy>
+		</target>
+	
 	<!-- The classpath for the project. -->
 	<path id="oe.classpath">
 		

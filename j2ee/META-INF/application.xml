@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE application PUBLIC "-//Sun Microsystems, Inc.//DTD J2EE Application 1.2//EN" "http://java.sun.com/j2ee/dtds/application_1_2.dtd">
 <application>
-  <display-name>Object Edge Diagnostics</display-name>
+  <display-name>OE Oracle Commerce NewRelic Plugin</display-name>
   <module>
     <web>
-      <web-uri>Diagnostics.war</web-uri>
-      <context-root>oe-diagnostics</context-root>
+      <web-uri>newrelic.war</web-uri>
+      <context-root>newrelic</context-root>
     </web>
   </module>
 </application>
