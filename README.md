@@ -62,7 +62,7 @@ Set DYNAMO_HOME and DYNAMO_ROOT variables in the environment pointing to the loc
 #### Step 3 - Assemble the `OE.NewRelic` module
 When assembling the .ear for your application, add `OE.NewRelic` to the list of modules to assemble before calling run-assembler command. 
 
-**Note**: For more informaton refer [Oracle Commerce Platform Programming Guide](http://docs.oracle.com/cd/E24152_01/Platform.10-1/ATGPlatformProgGuide/html/s0304commandoptions01.html).
+**Note**: For more information refer [Oracle Commerce Platform Programming Guide](http://docs.oracle.com/cd/E24152_01/Platform.10-1/ATGPlatformProgGuide/html/s0304commandoptions01.html).
 
 #### Step 4 - Start the `OE.NewRelic` module
 When starting the server add 'OE.NewRelic' to the list of modules to start, 
@@ -71,16 +71,16 @@ for ex:
 -Datg.dynamo.modules=Estore,OE.Newrelic
 ```
 
-#### Step 5 - Ensure successfull startup of the `OE.NewRelic` module
+#### Step 5 - Ensure successful startup of the `OE.NewRelic` module
 
 * Navigate to dyn/admin of the Oracle Commerce server and check for running products. You should see `OE.NewRelic` in the lis of running modules.
 ```
-http://[Servername]:[port]/dyn/admin/atg/dynamo/admin/en/running-products.jhtml
+http://[servername]:[port]/dyn/admin/atg/dynamo/admin/en/running-products.jhtml
 ```
 
 * Ensure that the REST API is providing health metrics. On a browser navigate to the following URL
 ```
-http://[Servername]:[port]/newrelic/rest/api/metrics/get
+http://[servername]:[port]/newrelic/rest/api/metrics/get
 ```
 Upon successful startup the response would be a list of all the metrics that are being monitored in the system.
 
