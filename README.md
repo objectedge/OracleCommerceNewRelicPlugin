@@ -4,7 +4,7 @@ An Oracle Commerce module for gathering health information from ATG servers.
 
 ## Requirements
 -----------------------
-* Oracle Commerce 10.1.2
+* Oracle Commerce 10.1.2 or higher
 * Java Runtime (JRE) environment Version 1.6 or later.
 * [Oracle Commerce NewRelic Plugin Agent ](https://github.com/objectedge/OracleCommerceNewRelicPluginAgent.git)
 * A New Relic account. Sign up for a free account [here](http://newrelic.com).
