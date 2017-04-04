@@ -84,4 +84,7 @@ http://[Servername]:[port]/newrelic/rest/api/metrics/get
 ```
 Upon successful startup the response would be a list of all the metrics that are being monitored in the system.
 
+## Uninstall 
+-------------
+Remove OE.Newrelic from the build and startup arguments to quickly remove the module from your application
 
