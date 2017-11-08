@@ -88,12 +88,6 @@
 	</servlet>
 	
 	<servlet>
-		<servlet-name>DynamicImageCreatorServlet</servlet-name>
-		<servlet-class>com.objectedge.util.DummyImageCreatorServlet</servlet-class>
-		<load-on-startup>3</load-on-startup>		
-	</servlet>
-	
-	<servlet>
 		<servlet-name>jersey-serlvet</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 		<init-param>
