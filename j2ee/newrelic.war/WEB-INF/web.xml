@@ -114,11 +114,6 @@
 		<servlet-name>AdminProxyServlet</servlet-name>
 		<url-pattern>/admin/*</url-pattern>
 	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>DynamicImageCreatorServlet</servlet-name>
-		<url-pattern>/dummy/*</url-pattern>
-	</servlet-mapping>
 
 	<!-- Exposes dynamo's pipleine for serving DSP pages -->
 	<servlet-mapping>
